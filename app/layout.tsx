@@ -3,11 +3,18 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
 
-const IBMPlex = IBM_Plex_Sans ({ 
+const IBMPlex = IBM_Plex_Sans({
   subsets: ["latin"],
   weight: ['400', '500', '600', '700'],
-  variable:'--font-ibm-plex'
+  variable: '--font-ibm-plex'
 })
 
 const geistSans = Geist({
@@ -31,11 +38,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={cn("font-IBMPlex antialiased",IBMPlex.variable)}>
-        {children}
-      </body>
-    </html>
+    <ClerkProvider appearance={{
+      variables: {colorPrimary: '#624cf5'}
+      }}>
+      <html lang="en">
+        <body
+          className={cn("font-IBMPlex antialiased", IBMPlex.variable)}>
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          {/* <SignedIn>
+            <UserButton />
+          </SignedIn> */}
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
